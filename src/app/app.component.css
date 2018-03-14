@@ -1,0 +1,21 @@
+.person-div{
+    text-align: center;
+}
+
+.input-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+  
+.input-full-width {
+  width: 100%;
+}
+
+.modal{
+  display: none; 
+}
+
+mat-cell{
+  overflow: visible;
+}

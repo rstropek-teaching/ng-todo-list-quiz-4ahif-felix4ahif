@@ -1,0 +1,99 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div style="text-align:center">
+  <h1>
+    {{ title }}!
+  </h1>
+</div>
+
+<div class="person-div">
+  <mat-form-field>
+    <mat-select [(ngModel)]="user">
+      <mat-option *ngFor="let person of myPersonArray | async" [value]="person.name">
+        {{person.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+</div>
+
+<div>
+  <mat-table [dataSource]="myDataArray">
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="assigned">
+      <mat-header-cell *matHeaderCellDef> assignedTo </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.assignedTo}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <mat-header-cell *matHeaderCellDef> description </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.description}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="done">
+      <mat-header-cell *matHeaderCellDef> done </mat-header-cell>
+      <mat-cell *matCellDef="let element" over>
+        <mat-checkbox [checked]="element.done === true" (change)="changeDoneFlag($event, element.id)"></mat-checkbox>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="edit">
+      <mat-header-cell *matHeaderCellDef> edit </mat-header-cell>
+      <mat-cell *matCellDef="let element" (click)="openDialog(element.id)">
+        <button mat-raised-button>edit</button>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="delete">
+      <mat-header-cell *matHeaderCellDef> delete </mat-header-cell>
+      <mat-cell *matCellDef="let element" (click)="deleteToDo(element.id)">
+        <button mat-raised-button>delete</button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
+    <mat-row *matRowDef="let myRowData; columns: matRow"></mat-row>
+  </mat-table>
+</div>
+
+<div>
+  <mat-checkbox (change)="filterToDos()" [(ngModel)]="assigned">assigned to me!</mat-checkbox>
+  <mat-checkbox (change)="filterToDos()" [(ngModel)]="notDone">not done!</mat-checkbox>
+</div>
+<button mat-raised-button (click)="showAddForm()">Add ToDo!</button>
+<div *ngIf="showForm" id="add-div">
+  <form class="input-form">
+    <mat-form-field class="input-full-width">
+      <input matInput placeholder="Description of ToDo" [(ngModel)]="newDescription" [ngModelOptions]="{standalone: true}">
+    </mat-form-field>
+
+    <mat-form-field class="input-full-width">
+      <mat-select [(ngModel)]="newAssignment" [ngModelOptions]="{standalone: true}">
+        <mat-option *ngFor="let person of myPersonArray | async" [value]="person.name">
+          {{person.name}}
+        </mat-option>
+        <mat-option >
+          no assignment
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button mat-raised-button type="button" (click)="addToDo()">Add!</button>
+  </form>
+</div>
+
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <h2>Type your new description into the Textbox!</h2>
+    <mat-form-field>
+      <input matInput [(ngModel)]="newDescription">
+    </mat-form-field>
+    <span class="close">&times;</span>
+        <button mat-raised-button type="button" (click)="updateToDo()">Save</button>
+  </div>
+
+</div>
